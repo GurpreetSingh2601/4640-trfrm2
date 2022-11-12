@@ -1,0 +1,18 @@
+---
+- name: installing nginx
+  hosts: webservers
+  tasks:
+    - name: install nginx rocky
+      become: true
+      ansible.builtin.dnf:
+        name: nginx
+        state: latest
+        update_cache: yes
+      when: ansible_distribution in ["Rocky"]
+    - name: start and enable nginx
+      become: true
+      systemd:
+        daemon_reload: yes
+        name: nginx
+        enabled: yes
+        state: started
